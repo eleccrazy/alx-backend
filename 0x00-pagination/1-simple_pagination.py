@@ -6,6 +6,18 @@ Desc: This module contains a python code related to backend
 Author: Gizachew Bayness
 Date Created: Feb 20, 2022
 """
+import csv
+import math
+from typing import List
+
+
+def index_range(page, page_size):
+    '''
+        Returns the range of indexes for a given page.
+    '''
+    start = (page - 1) * page_size
+    end = page * page_size
+    return start, end
 
 
 class Server:
