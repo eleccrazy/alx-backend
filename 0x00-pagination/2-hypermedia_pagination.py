@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-File: 1-simple_pagination.py
+File: 2-hypermedia_pagination.py
 Desc: This module contains a python code related to backend
       pagination.
 Author: Gizachew Bayness
