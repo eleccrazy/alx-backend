@@ -10,13 +10,18 @@ from base_caching import BaseCaching
 
 
 class BasicCache(BaseCaching):
-    """Basic dictionary"""
+    """Basic cache"""
+
+    def __init__(self):
+        super().__init__()
 
     def put(self, key, item):
-        """Puts item in cache"""
-        if key is not None and item is not None:
+        """Assigns a new key value pair to the cached_data"""
+        if (key is not None or item is not None):
             self.cache_data[key] = item
 
     def get(self, key):
-        """Gets item from cache"""
-        return self.cache_data.get(key, None)
+        """Returns the value in self.cache_data linked to key"""
+        if (key is None or key not in self.cache_data.keys()):
+            return None
+        return self.cache_data[key]
