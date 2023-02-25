@@ -10,38 +10,26 @@ from base_caching import BaseCaching
 
 
 class LIFOCache(BaseCaching):
-    """ LIFO caching """
+    """LIFO Cache"""
+    st = []
 
     def __init__(self):
-        """ Constructor """
+        '''Intialization'''
         super().__init__()
-        self.queue = []
 
     def put(self, key, item):
-        """ Puts item in cache """
-        if key is None or item is None:
-            return
+        """Stores a new key value pairt to the cache"""
+        if (key is not None and item is not None):
+            self.cache_data[key] = item
+            self.st.append(key)
 
-        self.cache_data[key] = item
-
-        if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-            if self.queue:
-                last = self.queue.pop()
-                del self.cache_data[last]
-                print("DISCARD: {}".format(last))
-
-        if key not in self.queue:
-            self.queue.append(key)
-        else:
-            self.mv_last_list(key)
+        if (len(self.cache_data) > BaseCaching.MAX_ITEMS):
+            key_to_be_removed = LIFOCache.st[-2]
+            self.cache_data.pop(key_to_be_removed)
+            print('DISCARD: {}'.format(LIFOCache.st.pop(-2)))
 
     def get(self, key):
-        """ Gets item from cache """
-        return self.cache_data.get(key, None)
-
-    def mv_last_list(self, item):
-        """ Moves element to last idx of list """
-        length = len(self.queue)
-        if self.queue[length - 1] != item:
-            self.queue.remove(item)
-            self.queue.append(item)
+        """Returns the item based on the key"""
+        if (key is None or key not in self.cache_data.keys()):
+            return None
+        return self.cache_data[key]
