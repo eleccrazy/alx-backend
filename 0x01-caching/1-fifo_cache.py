@@ -19,10 +19,9 @@ class FIFOCache(BaseCaching):
 
     def put(self, key, item):
         """Adds an item to a dictionary"""
-        if key is None or item is None:
-            return
-        self.cache_data[key] = item
-        FIFOCache.q.append(key)
+        if key is not None and item is not None:
+            self.cache_data[key] = item
+            FIFOCache.q.append(key)
 
         if (len(self.cache_data) > BaseCaching.MAX_ITEMS):
             key_to_be_removed = FIFOCache.q[0]
