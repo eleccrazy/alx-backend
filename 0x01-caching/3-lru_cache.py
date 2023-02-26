@@ -10,47 +10,35 @@ from base_caching import BaseCaching
 
 
 class LRUCache(BaseCaching):
-    """ LRU caching """
+    """LRU(List Recently Used) Caching"""
+    lst = []
 
     def __init__(self):
-        """ Constructor """
+        """Initialization"""
         super().__init__()
-        self.queue = []
 
     def put(self, key, item):
-        """ Puts item in cache """
-        if key is None or item is None:
-            return
+        """Stores a new item to the cache"""
+        if key is not None and item is not None:
+            if key in LRUCache.lst:
+                LRUCache.lst.remove(key)
+                LRUCache.lst.append(key)
+                return
+            self.cache_data[key] = item
+            LRUCache.lst.append(key)
 
-        self.cache_data[key] = item
-
-        if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-            first = self.get_first_list(self.queue)
-            if first:
-                self.queue.pop(0)
-                del self.cache_data[first]
-                print("DISCARD: {}".format(first))
-
-        if key not in self.queue:
-            self.queue.append(key)
-        else:
-            self.mv_last_list(key)
+        if (len(self.cache_data) > BaseCaching.MAX_ITEMS):
+            key_to_be_removed = LRUCache.lst[0]
+            if (key_to_be_removed in self.cache_data.keys()):
+                self.cache_data.pop(key_to_be_removed)
+                print('DISCARD: {}'.format(LRUCache.lst.pop(0)))
 
     def get(self, key):
-        """ Gets item from cache """
-        item = self.cache_data.get(key, None)
-        if item is not None:
-            self.mv_last_list(key)
-        return item
+        """Returns an item based on the key"""
+        if (key is None or key not in self.cache_data.keys()):
+            return None
+        if key in LRUCache.lst:
+            LRUCache.lst.remove(key)
+            LRUCache.lst.append(key)
 
-    def mv_last_list(self, item):
-        """ Moves element to last idx of list """
-        length = len(self.queue)
-        if self.queue[length - 1] != item:
-            self.queue.remove(item)
-            self.queue.append(item)
-
-    @staticmethod
-    def get_first_list(array):
-        """ Get first element of list or None """
-        return array[0] if array else None
+        return self.cache_data[key]
