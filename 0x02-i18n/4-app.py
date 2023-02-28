@@ -23,16 +23,13 @@ class Config(object):
 app.config.from_object(Config)
 
 
-# @babel.localeselector
+@babel.localeselector
 def get_locale():
     """Determines the best match with our supported languages."""
     lcl = request.args.get('locale', None)
     if lcl and lcl in app.config['LANGUAGES']:
         return lcl
     return request.accept_languages.best_match(app.config['LANGUAGES'])
-
-
-babel.init_app(app, locale_selector=get_locale)
 
 
 @app.route("/")
